@@ -1,0 +1,30 @@
+name: Spam Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to process"
+        required: true
+        type: string
+      count:
+        description: "Number of times to trigger"
+        required: true
+        type: number
+        default: 10
+
+jobs:
+  spam:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger workflows
+        run: |
+          for i in $(seq 1 ${{ github.event.inputs.count }}); do
+            echo "Triggering run $i/${{ github.event.inputs.count }}"
+            gh workflow run manual-url.yml \
+              --repo "${{ github.repository }}" \
+              --field url="${{ github.event.inputs.url }}"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}

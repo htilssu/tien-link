@@ -1,0 +1,21 @@
+name: Stop All Workflows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stop:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel all running workflows
+        run: |
+          gh run list --repo "${{ github.repository }}" --status in_progress --json databaseId -q '.[].databaseId' | \
+          while read id; do
+            if [ "$id" != "${{ github.run_id }}" ]; then
+              echo "Cancelling run $id"
+              gh run cancel "$id" --repo "${{ github.repository }}"
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}

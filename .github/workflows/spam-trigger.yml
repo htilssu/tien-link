@@ -20,11 +20,9 @@ jobs:
     steps:
       - name: Trigger workflows
         run: |
-          for i in $(seq 1 ${{ github.event.inputs.count }}); do
-            echo "Triggering run $i/${{ github.event.inputs.count }}"
+          seq 1 ${{ github.event.inputs.count }} | xargs -P 10 -I {} \
             gh workflow run manual-url.yml \
               --repo "${{ github.repository }}" \
               --field url="${{ github.event.inputs.url }}"
-          done
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -16,19 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Print URL
-        run: echo "URL nhận được: ${{ github.event.inputs.url }}"
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Install dependencies
-        run: pip install -e .
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Run with URL
-        run: python main.py --url "${{ github.event.inputs.url }}"
+        run: uv run tien-link --url "${{ github.event.inputs.url }}"
 
       - name: Re-trigger workflow
         run: |

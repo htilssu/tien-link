@@ -187,10 +187,14 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "cloakbrowser" },
+    { name = "httpx" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "cloakbrowser", specifier = ">=0.3.19" }]
+requires-dist = [
+    { name = "cloakbrowser", specifier = ">=0.3.19" },
+    { name = "httpx", specifier = ">=0.27" },
+]
 
 [[package]]
 name = "typing-extensions"

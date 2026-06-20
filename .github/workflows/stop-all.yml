@@ -14,7 +14,7 @@ jobs:
           while read id; do
             if [ "$id" != "${{ github.run_id }}" ]; then
               echo "Cancelling run $id"
-              gh run cancel "$id" --repo "${{ github.repository }}"
+              gh run cancel "$id" --repo "${{ github.repository }}" || true
             fi
           done
         env:

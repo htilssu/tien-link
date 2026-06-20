@@ -1,0 +1,39 @@
+name: Manual URL Trigger
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to process"
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print URL
+        run: echo "URL nhận được: ${{ github.event.inputs.url }}"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Run with URL
+        run: python main.py --url "${{ github.event.inputs.url }}"
+
+      - name: Re-trigger workflow
+        run: |
+          gh workflow run manual-url.yml \
+            --repo "${{ github.repository }}" \
+            --field url="${{ github.event.inputs.url }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

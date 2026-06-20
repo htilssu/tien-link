@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:deepwiki.com)",
+      "WebFetch(domain:github.com)",
+      "mcp__claude_ai_Context7__resolve-library-id",
+      "PowerShell(Get-ChildItem -Path \"D:\\\\tien-link\" -Recurse -Force | Where-Object { $_.FullName -notmatch '\\\\.venv|\\\\.idea|__pycache__' } | Select-Object FullName | Sort-Object FullName)"
+    ]
+  }
+}

@@ -26,6 +26,8 @@ jobs:
         run: uv run tien-link --url "${{ github.event.inputs.url }}"
 
       - name: Re-trigger workflow
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
         run: |
           gh workflow run manual-url.yml \
             --repo "${{ github.repository }}" \

@@ -10,12 +10,14 @@ jobs:
     steps:
       - name: Cancel all running workflows
         run: |
-          gh run list --repo "${{ github.repository }}" --status in_progress --json databaseId -q '.[].databaseId' | \
-          while read id; do
-            if [ "$id" != "${{ github.run_id }}" ]; then
+          while true; do
+            ids=$(gh run list --repo "${{ github.repository }}" --status in_progress --json databaseId -q '.[].databaseId' | grep -v "^${{ github.run_id }}$" || true)
+            [ -z "$ids" ] && echo "No more runs." && break
+            echo "$ids" | while read id; do
               echo "Cancelling run $id"
               gh run cancel "$id" --repo "${{ github.repository }}" || true
-            fi
+            done
+            sleep 3
           done
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
